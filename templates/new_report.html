@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block title %}Report an issue{% endblock %}
+{% block content %}<div class="narrow"><div class="page-heading"><div><span class="eyebrow">MAKE A DIFFERENCE</span><h1>Report a civic issue</h1><p>Share clear details so the right people can take action.</p></div></div>
+<form class="form-card wide" method="post" enctype="multipart/form-data">
+ <label>Issue title<input name="title" placeholder="e.g. Large pothole near main road" required maxlength="120"></label>
+ <label>Category<select name="category" required><option value="">Choose a category</option>{% for c in categories %}<option>{{ c }}</option>{% endfor %}</select></label>
+ <label>Description<textarea name="description" rows="4" placeholder="Describe the issue and why it needs attention..." required></textarea></label>
+ <label>Location / address<input id="address" name="address" placeholder="Street, area, landmark..." required></label>
+ <div class="map-tools"><button class="btn ghost small" type="button" id="locate">Use my current location</button><span id="location-status">Or click the map to pin the location.</span></div>
+ <div id="pick-map" class="pick-map"></div><input type="hidden" name="latitude" id="latitude"><input type="hidden" name="longitude" id="longitude">
+ <label>Photo (optional)<input type="file" name="image" accept=".png,.jpg,.jpeg,.webp"></label><small>Maximum 5 MB. PNG, JPG, JPEG or WEBP.</small>
+ <button class="btn primary full">Submit report</button>
+</form></div>{% endblock %}
+{% block scripts %}<script>
+const map = L.map('pick-map').setView([30.3165,78.0322], 12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
+let marker;
+function setPoint(lat,lng){if(marker)map.removeLayer(marker);marker=L.marker([lat,lng]).addTo(map);document.getElementById('latitude').value=lat;document.getElementById('longitude').value=lng;document.getElementById('location-status').textContent=`Pinned: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;}
+map.on('click',e=>setPoint(e.latlng.lat,e.latlng.lng));
+document.getElementById('locate').addEventListener('click',()=>{if(!navigator.geolocation){alert('Geolocation is not available in this browser.');return;}navigator.geolocation.getCurrentPosition(p=>{const {latitude,longitude}=p.coords;map.setView([latitude,longitude],16);setPoint(latitude,longitude);},()=>alert('Could not access location. You can click the map instead.'));});
+</script>{% endblock %}

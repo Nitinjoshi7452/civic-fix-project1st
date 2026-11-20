@@ -1,0 +1,6 @@
+<article class="report-card">
+ {% if r['image'] %}<img class="report-image" src="{{ url_for('static', filename='uploads/' + r['image']) }}" alt="Issue photo">{% else %}<div class="report-placeholder">⌖</div>{% endif %}
+ <div class="report-body"><div class="meta"><span class="tag">{{ r['category'] }}</span><span class="status {{ r['status']|lower|replace(' ','-') }}">{{ r['status'] }}</span></div>
+ <h3><a href="{{ url_for('report_detail', report_id=r['id']) }}">{{ r['title'] }}</a></h3><p>{{ r['description'][:115] }}{% if r['description']|length > 115 %}…{% endif %}</p>
+ <div class="card-foot"><span>⌖ {{ r['address'][:32] }}</span><span>♥ {{ r['votes'] }}</span></div></div>
+</article>

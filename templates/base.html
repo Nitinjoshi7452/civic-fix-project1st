@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}CivicFix{% endblock %} | CivicFix</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="{{ url_for('index') }}"><span class="brand-mark">C</span> CivicFix</a>
+  <nav>
+    <a href="{{ url_for('reports') }}">Explore reports</a>
+    {% if current_user.get('user_id') %}
+      <a href="{{ url_for('dashboard') }}">My dashboard</a>
+      {% if current_user.get('role') == 'admin' %}<a href="{{ url_for('admin') }}">Admin</a>{% endif %}
+      <a class="nav-cta" href="{{ url_for('new_report') }}">+ Report an issue</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a><a class="nav-cta" href="{{ url_for('register') }}">Join CivicFix</a>
+    {% endif %}
+  </nav>
+</header>
+<main class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<footer><div class="container footer-inner"><strong>CivicFix</strong><span>Small reports. Better neighbourhoods.</span></div></footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{% block scripts %}{% endblock %}
+</body></html>

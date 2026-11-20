@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero">
+ <div class="hero-copy"><span class="eyebrow">SMARTER CITIES START HERE</span><h1>See a problem?<br><em>Make it visible.</em></h1>
+ <p>Report potholes, garbage, broken streetlights and other civic issues. Help your community track them from report to resolution.</p>
+ <div class="actions"><a class="btn primary" href="{{ url_for('new_report') }}">Report an issue</a><a class="btn ghost" href="{{ url_for('reports') }}">Explore reports →</a></div></div>
+ <div class="hero-art"><div class="art-circle"></div><div class="floating-card"><span class="pin">⌖</span><div><b>Community powered</b><small>One report can start a change.</small></div></div><div class="mini-stat"><b>{{ stats['total'] or 0 }}</b><small>Community reports</small></div></div>
+</section>
+<section class="stats-grid">
+ <div class="stat"><span>Total reports</span><b>{{ stats['total'] or 0 }}</b></div><div class="stat"><span>Open</span><b>{{ stats['open_count'] or 0 }}</b></div><div class="stat"><span>In progress</span><b>{{ stats['progress_count'] or 0 }}</b></div><div class="stat"><span>Resolved</span><b>{{ stats['resolved_count'] or 0 }}</b></div>
+</section>
+<div class="section-heading"><div><span class="eyebrow">COMMUNITY ACTIVITY</span><h2>Issues that need attention</h2></div><a href="{{ url_for('reports') }}">View all reports →</a></div>
+<div class="report-grid">{% for r in reports %}{% include "_report_card.html" %}{% else %}<div class="empty">No reports yet. Be the first to report an issue.</div>{% endfor %}</div>
+{% endblock %}
